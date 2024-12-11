@@ -15,7 +15,7 @@ const StateContext  = createContext({
 });
 
 export const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState<null | null>(null);
     const [lastFiveNews, setLastFiveNews] = useState(null);
     const [token, _setToken] = useState(localStorage.getItem('token') ?? null);
 

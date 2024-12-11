@@ -3,36 +3,38 @@ import { useStateContext } from "../core/ContextProvider";
 import axiosClient from "../core/axiosClient";
 
 export default function Login() {
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const { setToken, setUser } = useStateContext();
 
-    const emailRef = useRef();
-    const passwordRef = useRef();
-    const {setToken , setUser} = useStateContext();
+  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const payload = {
+      email: emailRef.current?.value,
+      password: passwordRef.current?.value,
+    };
 
-    const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const payload = {
-            email: emailRef.current?.value,
-            password: passwordRef.current?.value,
+    axiosClient.post("auth/login", payload)
+      .then(({ data }) => {
+        setToken(data.token);
+        // Ensure the data has the correct structure
+        setUser(data.data); // Pass the correct user object here
+        console.log(data.data);
+      })
+      .catch(err => {
+        const response = err.response;
+        if (response && response.status === 422) {
+          console.log(response.data.errors);
         }
+      });
+    console.log(payload);
+  };
 
-        axiosClient.post("auth/login" , payload).then(({data}) => {
-            setToken(data.token);
-            setUser(data.data);
-            console.log(data.data);
-        }).catch(err => {
-            const response = err.response;
-            if(response && response.status === 422){
-                console.log(response.data.errors);
-            }
-        });
-        console.log(payload);
-    }
   return (
     <section className="container mx-auto">
       <section className="login flex flex-col justify-center items-center m-9">
         <form
-        onSubmit={handleLogin}
-          action=""
+          onSubmit={handleLogin}
           className="flex flex-col w-96 justify-center bg-gray-100 shadow-lg rounded-lg p-8"
         >
           <img
@@ -44,13 +46,13 @@ export default function Login() {
             Login
           </h2>
           <input
-          ref={emailRef}
+            ref={emailRef}
             type="text"
             placeholder="Email"
             className="my-2 py-2 px-4 border border-blue-300 rounded-full bg-blue-50 text-blue-700 outline-none placeholder:text-blue-500"
           />
           <input
-          ref={passwordRef}
+            ref={passwordRef}
             type="password"
             placeholder="Password"
             className="my-2 py-2 px-4 border border-blue-300 rounded-full bg-blue-50 text-blue-700 outline-none placeholder:text-blue-500"
