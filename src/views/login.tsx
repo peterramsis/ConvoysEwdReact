@@ -15,10 +15,10 @@ export default function Login() {
             password: passwordRef.current?.value,
         }
 
-        axiosClient.post("/login" , payload).then(({data}) => {
-            console.log(data);
+        axiosClient.post("auth/login" , payload).then(({data}) => {
             setToken(data.token);
-            setUser(data.user);
+            setUser(data.data);
+            console.log(data.data);
         }).catch(err => {
             const response = err.response;
             if(response && response.status === 422){
