@@ -13,6 +13,8 @@ export default function Home() {
   const fetchData = () => {
     axiosClient.get("/lastFiveNews").then((result) => {
       setLastFiveNews(result.data.data);
+    }).catch(error => {
+      console.error(error);
     });
   };
 
