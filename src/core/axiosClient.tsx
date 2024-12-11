@@ -13,14 +13,12 @@ axiosClient.interceptors.request.use((config) => {
 
 axiosClient.interceptors.response.use(
     (response) => {
-        console.log(response);
         return response;
     },
     (error) => {
         
         try {
             const { response } = error;
-            console.log(response);
             if (response.status === 401) {
                 localStorage.removeItem("token");
             }

@@ -1,34 +1,20 @@
-import { useCallback, useContext ,createContext , useState} from "react";
+import { useCallback, useContext ,createContext , useState ,ReactNode } from "react";
 
-interface User {
-    id: number
-    name: string
-    ar_name: string
-    en_name: string
-    email: string
-    gander: string
-    phone: string
-    image: string
-    birthday: string
-    role: string
-    permissions: string[]
-    notification: any[]
-    question_medicine: string
-    graduation_year: string
-    degree: string
-    specialties: string
+
+  interface ContextProviderProps {
+    children: ReactNode;
   }
 
 const StateContext  = createContext({
    user: null,
    token: null,
    lastFiveNews: null,
-   setLastFiveNews: (news: Array<T>[])=>{},
-   setUser: (user: User)=>{},
-   setToken: (token: string)=>{}
+   setLastFiveNews: ()=>{},
+   setUser: ()=>{},
+   setToken: ()=>{}
 });
 
-export const ContextProvider =({children})=>{
+export const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
     const [user, setUser] = useState(null);
     const [lastFiveNews, setLastFiveNews] = useState(null);
     const [token, _setToken] = useState(localStorage.getItem('token') ?? null);
